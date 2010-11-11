@@ -23,7 +23,7 @@ begin
 
     Image.Patterns.Add('', 0, 0, Bitmap.Width, Bitmap.Height);
 
-    Bitmap.ResizeCanvasPowerOfTwo(Color4b(0,0,0,0));
+    Bitmap.ResizeCanvasPowerOfTwo();
 
     Image.Texture.Import(Bitmap.Graphic);
     Image.Texture.Build;
