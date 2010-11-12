@@ -1,3 +1,5 @@
+#summary Load non power of two textures
+
 Shows code to resize a TPHXImage into power of two size
 
 = Introduction =
