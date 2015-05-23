@@ -1,0 +1,46 @@
+# Introduction #
+
+This demonstration shows how to rotate sprites around a defined point
+
+
+# Details #
+
+This is a summary of the issue
+
+http://code.google.com/p/phoenixlib/issues/detail?id=54
+
+We have this image
+
+http://phoenixlib.googlecode.com/issues/attachment?aid=8683336550084894174&name=Rotation.jpg&token=60db7cb6f3ec3944e6e889683e787897&inline=1
+
+and want to rotate the sprites like this
+
+http://phoenixlib.googlecode.com/issues/attachment?aid=6265543515831736037&name=RotationPlane.jpg&token=4ca57b87a180a2af614a533e2cbd9962&inline=1
+
+
+The trick to this is to draw the rectangle of planes centered around origin, then rotating the verticies buffer and finally translating the buffer to the correct position.
+
+```
+
+  Images[0].DrawBuffer(FBuffer, Images[0].Patterns[0].Width, 0, 0);
+  Images[0].DrawBuffer(FBuffer,-Images[0].Patterns[0].Width, 0, 0);
+  Images[0].DrawBuffer(FBuffer,0, 0, 0);
+  Images[0].DrawBuffer(FBuffer,0,  Images[0].Patterns[0].Height, 0);
+  Images[0].DrawBuffer(FBuffer,0, -Images[0].Patterns[0].Height, 0);
+
+  FBuffer.Transform( Matrix_Multiply( Matrix_Translation(X,Y,0), Matrix_RotationZ(FAngle)  ) );
+```
+
+_Note that the order of the matricies inside the Multiply is important, if you swap the translation and the rotation matricies you'll get the same result as before._
+
+So the conclusion is to allways keep you'r objects in the origin (this is what pivots do when dealing with a single image) and then rotate and finally translate them to the correct position.
+
+To understand what the matrix transformations does you should always read matrix translations from right to bottom) the above can be written like the following using operator overloading:
+
+```
+FBuffer.Transform(  Matrix_Translation(X,Y,0) * Matrix_RotationZ(FAngle) );
+```
+
+Looking at this you can see that we first rotates the buffer (around origin as the images is drawn around (0,0)) and then translates the buffer to the wanted position, just as we want!
+
+_Note that the DrawBuffer draws the images into an vertex array and not into a image, thus you can modify the verticies in the buffer before rendering it._
